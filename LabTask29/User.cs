@@ -10,11 +10,27 @@ namespace LabTask29
     {
         public string UserName { get; set; }
         public string Password { get; set; }
-        public Role Role { get; set; }
+        public Role Role { get; set; } = Role.User;
 
         static List<User> _users = new List<User>();
 
-       
+        public User()
+        {
+
+        }
+
+        public User(string userName, string password)
+        {
+            UserName = userName;
+            Password = password;
+            if (userName.ToLower() == "admin")
+                Role = Role.Admin;
+            else if (userName.ToLower() == "moderator")
+                Role = Role.Moderator;
+            else
+                Role = Role.User;
+        }
+
         public static void Login(string userName, string password)
         {
 
@@ -22,22 +38,29 @@ namespace LabTask29
             {
                 if (!(string.IsNullOrEmpty(password)))
                 {
-                    foreach (var user in _users)
+                    if (_users.Count != 0)
                     {
-                        if (user.UserName == userName && user.Password == password)
+                        foreach (var user in _users)
                         {
-                            if (user.UserName.ToLower() == "admin")
-                                user.Role = Role.User;
-                            else if (user.UserName.ToLower() == "moderator")
-                                user.Role = Role.Moderator;
-                            else
-                                user.Role = Role.User;
+                            if (user.UserName == userName && user.Password == password)
+                            {
+                                if (user.UserName.ToLower() == "admin")
+                                    user.Role = Role.Admin;
+                                else if (user.UserName.ToLower() == "moderator")
+                                    user.Role = Role.Moderator;
+                                else
+                                    user.Role = Role.User;
 
-                            Console.WriteLine("You have successfully login");
+                                Console.WriteLine("you have successfully logged in");
+                                return;
+                            }
+
                         }
-                        else
-                            throw new("Username or password is incorrect");
+                        throw new("Username or password is incorrect");
+
                     }
+                    else
+                        throw new("Username or password is incorrect");
                 }
                 else
                     throw new("Password is empty");
@@ -59,9 +82,9 @@ namespace LabTask29
                 {
                     foreach (var user in _users)
                     {
-                        if(user.UserName == userName)
+                        if (user.UserName == userName)
                         {
-                            throw new ("User is exist");
+                            throw new("User is exist");
                         }
                     }
                     if (password.Length >= 8)
@@ -79,7 +102,7 @@ namespace LabTask29
                             {
                                 isLower = true;
                             }
-                        }    
+                        }
 
                         if (isUpper && isLower)
                         {
@@ -87,7 +110,7 @@ namespace LabTask29
                             Console.WriteLine("You have successfully registered");
                         }
                         else
-                            throw new ("1 upper and 1 lower case letter is required");
+                            throw new("1 upper and 1 lower case letter is required");
                     }
                     else
                         throw new("Password length should be more than 7");

@@ -23,6 +23,8 @@ namespace LabTask29
             Surname = surname;
             Age = age;
             Balance = balance;
+            Products = new List<Product>();
+            Sales = new List<Sales>();
         }
     }
 }
